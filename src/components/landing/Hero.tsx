@@ -83,15 +83,15 @@ export function Hero() {
         </motion.video>
       </motion.div>
 
-      {/* Overlay degradado */}
+      {/* Overlay degradado navy de marca */}
       <div
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, rgb(15,23,42) 30%, rgba(15,23,42,0.85) 50%, rgba(15,23,42,0.35) 75%, rgba(15,23,42,0) 100%)",
+            "linear-gradient(to right, var(--brand-navy-deep) 28%, color-mix(in oklab, var(--brand-navy-deep) 80%, transparent) 52%, color-mix(in oklab, var(--brand-navy-deep) 35%, transparent) 75%, transparent 100%)",
         }}
       />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy/80 via-transparent to-transparent md:hidden" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy-deep via-navy-deep/70 to-transparent md:hidden" />
 
       {/* Contenido con parallax inverso */}
       <motion.div
@@ -102,7 +102,7 @@ export function Hero() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="flex max-w-xl flex-col items-start gap-6 text-left"
+          className="flex max-w-2xl flex-col items-start gap-6 text-left"
         >
           <motion.span
             variants={itemVariants}
@@ -114,29 +114,30 @@ export function Hero() {
               animate={{ width: 40 }}
               transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             />
-            Liderazgo federal en seguros · Est. 1998
+            #NoSosUnNúmero · JH Broker
           </motion.span>
 
           <motion.h1
             variants={itemVariants}
-            className="font-display text-5xl font-medium leading-[1.05] text-balance text-cream md:text-7xl lg:text-[5.5rem]"
+            className="font-display text-6xl font-bold leading-[0.95] text-balance text-cream md:text-8xl lg:text-[7rem]"
           >
-            La arquitectura del <br />
-            <motion.span
+            No Sos <br />
+            Un <motion.span
               className="italic text-gold inline-block"
               whileHover={prefersReducedMotion ? undefined : { letterSpacing: "0.01em", transition: { duration: 0.4 } }}
             >
-              respaldo total.
+              Número.
             </motion.span>
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-pretty text-base leading-relaxed text-slate md:text-lg"
+            className="text-pretty text-base leading-relaxed text-cream/75 md:text-lg"
           >
-            Liberamos al Productor Asesor de la carga operativa con infraestructura tecnológica
-            de vanguardia y 25 años de solidez institucional en toda la Argentina.
+            La voz de los que eligieron crecer con JH Broker. Acompañamos al Productor Asesor
+            con tecnología, respaldo institucional y trato humano en toda la Argentina.
           </motion.p>
+
 
           <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-4">
             {/* CTA primario con microinteracciones */}
