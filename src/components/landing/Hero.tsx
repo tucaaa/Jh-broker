@@ -1,27 +1,89 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { useRef, useEffect } from "react";
 import brokerVideo from "@/assets/broker.mp4.asset.json";
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Parallax suave en scroll
+  const { scrollY } = useScroll();
+  const rawVideoY = useTransform(scrollY, [0, 800], [0, 140]);
+  const rawVideoScale = useTransform(scrollY, [0, 800], [1, 1.08]);
+  const rawContentY = useTransform(scrollY, [0, 600], [0, -60]);
+  const rawContentOpacity = useTransform(scrollY, [0, 500], [1, 0.2]);
+
+  const videoY = useSpring(rawVideoY, { stiffness: 80, damping: 20, mass: 0.4 });
+  const videoScale = useSpring(rawVideoScale, { stiffness: 80, damping: 20, mass: 0.4 });
+  const contentY = useSpring(rawContentY, { stiffness: 90, damping: 22, mass: 0.4 });
+
+  // Parallax por puntero (sutil)
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const px = useSpring(pointerX, { stiffness: 60, damping: 18 });
+  const py = useSpring(pointerY, { stiffness: 60, damping: 18 });
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const handler = (e: PointerEvent) => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      pointerX.set(nx * 18);
+      pointerY.set(ny * 14);
+    };
+    window.addEventListener("pointermove", handler);
+    return () => window.removeEventListener("pointermove", handler);
+  }, [pointerX, pointerY, prefersReducedMotion]);
+
   return (
-    <header
+    <motion.header
+      ref={ref}
       id="top"
       className="relative flex h-screen min-h-[720px] w-full items-center overflow-hidden bg-navy"
     >
-      {/* Video de fondo (lado derecho) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute right-0 top-0 z-0 h-full w-full object-cover md:w-[65%]"
-        poster=""
+      {/* Video de fondo con parallax */}
+      <motion.div
+        style={{ y: prefersReducedMotion ? 0 : videoY, scale: prefersReducedMotion ? 1 : videoScale }}
+        className="absolute right-0 top-0 z-0 h-full w-full md:w-[65%] will-change-transform"
       >
-        <source src={brokerVideo.url} type="video/mp4" />
-      </video>
+        <motion.video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={{ x: prefersReducedMotion ? 0 : px, y: prefersReducedMotion ? 0 : py }}
+          className="h-full w-full object-cover"
+          initial={{ opacity: 0, scale: 1.12 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <source src={brokerVideo.url} type="video/mp4" />
+        </motion.video>
+      </motion.div>
 
-      {/* Overlay degradado: navy sólido a la izquierda → transparente a la derecha */}
+      {/* Overlay degradado */}
       <div
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
@@ -29,74 +91,118 @@ export function Hero() {
             "linear-gradient(to right, rgb(15,23,42) 30%, rgba(15,23,42,0.85) 50%, rgba(15,23,42,0.35) 75%, rgba(15,23,42,0) 100%)",
         }}
       />
-      {/* Sutil veladura inferior para legibilidad en mobile */}
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy/80 via-transparent to-transparent md:hidden" />
 
-      {/* Contenido */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-24">
-        <div className="flex max-w-xl flex-col items-start gap-6 text-left">
+      {/* Contenido con parallax inverso */}
+      <motion.div
+        style={{ y: prefersReducedMotion ? 0 : contentY, opacity: prefersReducedMotion ? 1 : rawContentOpacity }}
+        className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-24"
+      >
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex max-w-xl flex-col items-start gap-6 text-left"
+        >
           <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            variants={itemVariants}
             className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.4em] text-gold"
           >
-            <span className="h-px w-10 bg-gold" />
+            <motion.span
+              className="block h-px bg-gold"
+              initial={{ width: 0 }}
+              animate={{ width: 40 }}
+              transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            />
             Liderazgo federal en seguros · Est. 1998
           </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1 }}
+            variants={itemVariants}
             className="font-display text-5xl font-medium leading-[1.05] text-balance text-cream md:text-7xl lg:text-[5.5rem]"
           >
             La arquitectura del <br />
-            <span className="italic text-gold">respaldo total.</span>
+            <motion.span
+              className="italic text-gold inline-block"
+              whileHover={prefersReducedMotion ? undefined : { letterSpacing: "0.01em", transition: { duration: 0.4 } }}
+            >
+              respaldo total.
+            </motion.span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            variants={itemVariants}
             className="text-pretty text-base leading-relaxed text-slate md:text-lg"
           >
             Liberamos al Productor Asesor de la carga operativa con infraestructura tecnológica
             de vanguardia y 25 años de solidez institucional en toda la Argentina.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45 }}
-            className="mt-4 flex flex-wrap gap-4"
-          >
-            <a
+          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-4">
+            {/* CTA primario con microinteracciones */}
+            <motion.a
               href="#productores"
-              className="group neumorph-gold inline-flex items-center gap-3 bg-gold px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-navy transition-transform hover:-translate-y-0.5 active:translate-y-0"
+              className="group neumorph-gold relative inline-flex items-center gap-3 overflow-hidden bg-gold px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-navy"
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 22 }}
             >
-              Sumarme a la red
-              <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-            <a
+              {/* Shimmer */}
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                initial={{ x: "-150%" }}
+                whileHover={{ x: "450%" }}
+                transition={{ duration: 0.9, ease: "easeOut" }}
+              />
+              <span className="relative">Sumarme a la red</span>
+              <motion.span
+                className="relative"
+                initial={{ x: 0, y: 0 }}
+                whileHover={{ x: 3, y: -3 }}
+                transition={{ type: "spring", stiffness: 500, damping: 20 }}
+              >
+                <ArrowUpRight className="size-4" />
+              </motion.span>
+            </motion.a>
+
+            {/* CTA secundario */}
+            <motion.a
               href="#ecosistema"
-              className="glass inline-flex items-center gap-3 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-cream transition-colors hover:bg-white/10"
+              className="glass relative inline-flex items-center gap-3 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-cream"
+              whileHover={{ y: -2, backgroundColor: "rgba(255,255,255,0.10)" }}
+              whileTap={{ y: 0, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 22 }}
             >
               Conocer ecosistema
-            </a>
+              <motion.span
+                aria-hidden
+                className="block h-px bg-cream/60"
+                initial={{ width: 0 }}
+                whileHover={{ width: 20 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              />
+            </motion.a>
           </motion.div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
+      {/* Scroll indicator animado */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.4em] text-cream/40 md:flex"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.4, duration: 1 }}
+        className="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-cream/40 md:flex"
       >
         Scroll
-        <span className="block h-10 w-px animate-pulse bg-cream/40" />
+        <span className="relative block h-10 w-px overflow-hidden bg-cream/15">
+          <motion.span
+            className="absolute left-0 top-0 block h-1/2 w-full bg-gold"
+            animate={{ y: ["-100%", "200%"] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </span>
       </motion.div>
-    </header>
+    </motion.header>
   );
 }
