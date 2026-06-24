@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { JhBrokerLogo } from "./JhBrokerLogo";
 
 const links = [
   { href: "#ecosistema", label: "Ecosistema" },
@@ -28,13 +29,8 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-3">
-          <div className="grid size-9 place-items-center rounded-sm bg-gold font-display text-navy">
-            <span className="text-base font-bold">JH</span>
-          </div>
-          <span className="font-display text-lg font-bold uppercase tracking-[0.18em] text-cream">
-            Broker
-          </span>
+        <a href="#top" className="flex items-center" aria-label="JH Broker — Inicio">
+          <JhBrokerLogo className="text-2xl md:text-[1.65rem]" />
         </a>
 
         <div className="hidden items-center gap-10 md:flex">

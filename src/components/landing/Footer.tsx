@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { JhBrokerLogo } from "./JhBrokerLogo";
 
 const sedes = ["Mendoza (Casa Central)", "Buenos Aires", "Córdoba", "Mar del Plata", "Neuquén"];
 const nav = [
@@ -13,13 +14,8 @@ export function Footer() {
     <footer className="border-t border-white/5 bg-navy-deep pt-20 pb-10 text-cream/70">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-4">
         <div className="md:col-span-1">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="grid size-9 place-items-center rounded-sm bg-gold font-display text-navy">
-              <span className="text-base font-bold">JH</span>
-            </div>
-            <span className="font-display text-lg font-bold uppercase tracking-[0.18em] text-cream">
-              Broker
-            </span>
+          <div className="mb-6 flex items-center">
+            <JhBrokerLogo className="text-3xl" />
           </div>
           <p className="max-w-xs text-pretty text-xs leading-relaxed">
             Organización de Productores Asesores de Seguros con más de 25 años de
