@@ -30,7 +30,7 @@ export function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         <a href="#top" className="flex items-center" aria-label="JH Broker — Inicio">
-          <JhBrokerLogo className="text-2xl md:text-[1.65rem]" />
+          <JhBrokerLogo onDark className="h-7 md:h-8" />
         </a>
 
         <div className="hidden items-center gap-10 md:flex">
