@@ -79,7 +79,7 @@ export function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <source src={brokerVideo.url} type="video/mp4" />
+          <source src={"/broker.mp4"} type="video/mp4" />
         </motion.video>
       </motion.div>
 
