@@ -119,11 +119,12 @@ export function Hero() {
 
           <motion.h1
             variants={itemVariants}
-            className="font-display text-6xl font-bold leading-[0.95] text-balance text-cream md:text-8xl lg:text-[7rem]"
+            className="font-hero text-6xl font-medium leading-[0.92] tracking-[-0.02em] text-balance text-cream md:text-8xl lg:text-[7.5rem]"
+            style={{ fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144' }}
           >
             No Sos <br />
             Un <motion.span
-              className="italic text-gold inline-block"
+              className="italic font-black text-gold inline-block"
               whileHover={prefersReducedMotion ? undefined : { letterSpacing: "0.01em", transition: { duration: 0.4 } }}
             >
               Número.
