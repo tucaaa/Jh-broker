@@ -15,7 +15,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="mb-6 flex items-center">
-            <JhBrokerLogo className="text-3xl" />
+            <JhBrokerLogo onDark className="h-10" />
           </div>
           <p className="max-w-xs text-pretty text-xs leading-relaxed">
             Organización de Productores Asesores de Seguros con más de 25 años de
