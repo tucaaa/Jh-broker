@@ -55,6 +55,7 @@
   --color-cream: var(--brand-cream);
 
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-hero: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
