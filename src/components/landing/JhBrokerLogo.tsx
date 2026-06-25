@@ -1,30 +1,32 @@
+import logoAsset from "@/assets/jh-broker-logo.png.asset.json";
+
 type Props = {
   className?: string;
-  /** color for the dark letters — defaults to current text color (use text-cream on dark bg) */
-  baseClassName?: string;
-  /** color for the mint "ok" accent */
-  accentClassName?: string;
+  /** When true, wraps the logo in a cream pill so it stays legible on dark backgrounds */
+  onDark?: boolean;
 };
 
 /**
- * JH Broker wordmark — "jH broker." with the "ok" rendered in brand mint.
- * Built in HTML so it inherits the hero typography and brand tokens.
+ * JH Broker official wordmark (PNG). Use `onDark` over navy/cream-dark surfaces
+ * so the navy lettering keeps contrast.
  */
-export function JhBrokerLogo({
-  className = "",
-  baseClassName = "text-cream",
-  accentClassName = "text-gold",
-}: Props) {
+export function JhBrokerLogo({ className = "", onDark = false }: Props) {
+  const img = (
+    <img
+      src={logoAsset.url}
+      alt="JH Broker"
+      className={`block h-full w-auto select-none ${className}`}
+      draggable={false}
+    />
+  );
+
+  if (!onDark) {
+    return <span className="inline-flex h-10 items-center">{img}</span>;
+  }
+
   return (
-    <span
-      className={`font-display inline-flex items-baseline font-extrabold leading-none tracking-tight lowercase ${baseClassName} ${className}`}
-    >
-      <span>j</span>
-      <span className="uppercase">H</span>
-      <span>&nbsp;br</span>
-      <span className={accentClassName}>ok</span>
-      <span>er</span>
-      <span className={accentClassName}>.</span>
+    <span className="inline-flex h-10 items-center rounded-xl bg-cream px-3 py-1.5 shadow-sm">
+      {img}
     </span>
   );
 }
