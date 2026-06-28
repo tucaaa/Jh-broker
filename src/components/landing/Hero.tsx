@@ -1,7 +1,6 @@
 import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useRef, useEffect } from "react";
-import brokerVideo from "@/assets/broker.mp4.asset.json";
 
 const containerVariants = {
   hidden: {},
@@ -62,10 +61,10 @@ export function Hero() {
       id="top"
       className="relative flex h-screen min-h-[720px] w-full items-center overflow-hidden bg-navy"
     >
-      {/* Video de fondo con parallax */}
+      {/* 1. EL TRUCO: Video al 100% de ancho (w-full) alineado a la derecha (object-right) */}
       <motion.div
         style={{ y: prefersReducedMotion ? 0 : videoY, scale: prefersReducedMotion ? 1 : videoScale }}
-        className="absolute right-0 top-0 z-0 h-full w-full md:w-[65%] will-change-transform"
+        className="absolute inset-0 z-0 h-full w-full will-change-transform"
       >
         <motion.video
           autoPlay
@@ -74,7 +73,7 @@ export function Hero() {
           playsInline
           preload="auto"
           style={{ x: prefersReducedMotion ? 0 : px, y: prefersReducedMotion ? 0 : py }}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover object-right opacity-100"
           initial={{ opacity: 0, scale: 1.12 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
@@ -83,20 +82,21 @@ export function Hero() {
         </motion.video>
       </motion.div>
 
-      {/* Overlay degradado navy de marca */}
+      {/* 2. MÁSCARA ULTRA SUAVE: Tapa al 100% el lado izquierdo y se desvanece de golpe hacia la derecha */}
       <div
-        className="absolute inset-0 z-[1] pointer-events-none"
+        className="absolute inset-0 z-[1] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(to right, var(--brand-navy-deep) 28%, color-mix(in oklab, var(--brand-navy-deep) 80%, transparent) 52%, color-mix(in oklab, var(--brand-navy-deep) 35%, transparent) 75%, transparent 100%)",
+            "linear-gradient(to right, var(--brand-navy) 0%, var(--brand-navy) 42%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 60%, color-mix(in oklab, var(--brand-navy) 20%, transparent) 80%, transparent 100%)",
         }}
       />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy-deep via-navy-deep/70 to-transparent md:hidden" />
+      {/* Degradado exclusivo para celulares (de abajo hacia arriba) */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy via-navy/40 to-transparent md:hidden pointer-events-none" />
 
-      {/* Contenido con parallax inverso */}
+      {/* 3. CONTENIDO EN CUADRANTE ESTRICTO */}
       <motion.div
         style={{ y: prefersReducedMotion ? 0 : contentY, opacity: prefersReducedMotion ? 1 : rawContentOpacity }}
-        className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-24"
+        className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-12 pt-24"
       >
         <motion.div
           variants={containerVariants}
@@ -104,12 +104,13 @@ export function Hero() {
           animate="visible"
           className="flex max-w-2xl flex-col items-start gap-6 text-left"
         >
+          {/* Eyebrow / Etiqueta superior */}
           <motion.span
             variants={itemVariants}
-            className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.4em] text-gold"
+            className="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.4em] text-slate"
           >
             <motion.span
-              className="block h-px bg-gold"
+              className="block h-px bg-slate/40"
               initial={{ width: 0 }}
               animate={{ width: 40 }}
               transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -117,46 +118,35 @@ export function Hero() {
             #NoSosUnNúmero · JH Broker
           </motion.span>
 
+          {/* Título unificado en Azul Marino Oscuro sólido */}
           <motion.h1
             variants={itemVariants}
-            className="font-hero text-6xl font-medium leading-[0.92] tracking-[-0.02em] text-balance text-cream md:text-8xl lg:text-[7.5rem]"
-            style={{ fontOpticalSizing: "auto", fontVariationSettings: '"opsz" 144' }}
+            className="font-hero text-6xl font-medium leading-[1.05] tracking-[-0.02em] text-balance text-cream md:text-7xl lg:text-8xl"
           >
             No Sos <br />
-            Un <motion.span
-              className="italic font-black text-gold inline-block"
-              whileHover={prefersReducedMotion ? undefined : { letterSpacing: "0.01em", transition: { duration: 0.4 } }}
-            >
-              Número.
-            </motion.span>
+            Un Número.
           </motion.h1>
 
+          {/* Párrafo descriptivo alineado */}
           <motion.p
             variants={itemVariants}
-            className="text-pretty text-base leading-relaxed text-cream/75 md:text-lg"
+            className="text-pretty text-base leading-relaxed text-slate md:text-lg max-w-xl"
           >
             La voz de los que eligieron crecer con JH Broker. Acompañamos al Productor Asesor
             con tecnología, respaldo institucional y trato humano en toda la Argentina.
           </motion.p>
 
-
-          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-4">
-            {/* CTA primario con microinteracciones */}
+          {/* BOTONES PREMIUM MODERNOS */}
+          <motion.div variants={itemVariants} className="mt-6 flex flex-wrap gap-4">
+            
+            {/* Botón Principal: Redondeado completo, fondo Azul Marino, texto blanco */}
             <motion.a
               href="#productores"
-              className="group neumorph-gold relative inline-flex items-center gap-3 overflow-hidden bg-gold px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-navy"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-cream px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-white shadow-md shadow-cream/10"
               whileHover={{ y: -3, scale: 1.02 }}
               whileTap={{ y: 0, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
             >
-              {/* Shimmer */}
-              <motion.span
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                initial={{ x: "-150%" }}
-                whileHover={{ x: "450%" }}
-                transition={{ duration: 0.9, ease: "easeOut" }}
-              />
               <span className="relative">Sumarme a la red</span>
               <motion.span
                 className="relative"
@@ -168,22 +158,15 @@ export function Hero() {
               </motion.span>
             </motion.a>
 
-            {/* CTA secundario */}
+            {/* Botón Secundario: Transparente con borde sutil en gris oscuro */}
             <motion.a
               href="#ecosistema"
-              className="glass relative inline-flex items-center gap-3 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-cream"
-              whileHover={{ y: -2, backgroundColor: "rgba(255,255,255,0.10)" }}
+              className="relative inline-flex items-center gap-3 rounded-full border border-slate/30 bg-white/40 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-cream backdrop-blur-sm transition-all duration-300 hover:border-cream/40 hover:bg-cream/5"
+              whileHover={{ y: -2 }}
               whileTap={{ y: 0, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
             >
               Conocer ecosistema
-              <motion.span
-                aria-hidden
-                className="block h-px bg-cream/60"
-                initial={{ width: 0 }}
-                whileHover={{ width: 20 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              />
             </motion.a>
           </motion.div>
         </motion.div>
@@ -199,7 +182,7 @@ export function Hero() {
         Scroll
         <span className="relative block h-10 w-px overflow-hidden bg-cream/15">
           <motion.span
-            className="absolute left-0 top-0 block h-1/2 w-full bg-gold"
+            className="absolute left-0 top-0 block h-1/2 w-full bg-cream/40"
             animate={{ y: ["-100%", "200%"] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           />

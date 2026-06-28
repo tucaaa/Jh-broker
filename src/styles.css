@@ -94,13 +94,13 @@
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
 
-  /* JH Broker brand palette — navy / mint / cream */
-  --brand-navy: oklch(0.32 0.08 255);
-  --brand-navy-deep: oklch(0.22 0.07 255);
-  --brand-gold: oklch(0.84 0.11 175);
-  --brand-gold-soft: oklch(0.90 0.07 175);
-  --brand-slate: oklch(0.68 0.02 250);
-  --brand-cream: oklch(0.955 0.018 85);
+/* JH Broker brand palette — INVERTIDA PARA TEMA CLARO */
+  --brand-navy: #ffffff; /* Antes era azul oscuro, ahora es Blanco puro para los fondos */
+  --brand-navy-deep: #f8fafc; /* Antes era azul más oscuro, ahora es un gris muy clarito para separar secciones */
+  --brand-gold: oklch(0.84 0.11 175); /* Mantenemos tu Turquesa/Menta original para botones y acentos */
+  --brand-gold-soft: oklch(0.398 0.07 227.392); /* Turquesa suave */
+  --brand-slate: #475569; /* Un gris oscuro para textos secundarios */
+  --brand-cream: #0c1d42; /* Antes era crema/blanco, ahora es Azul Marino Oscuro para que los textos resalten sobre el blanco */
 }
 
 .dark {
@@ -147,16 +147,7 @@
   }
 }
 
-/* Marquee */
-@keyframes jh-marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.jh-marquee {
-  display: flex;
-  width: max-content;
-  animation: jh-marquee 38s linear infinite;
-}
+
 
 /* Glass + neumorph helpers */
 @utility glass {
@@ -181,3 +172,31 @@
 @utility text-balance {
   text-wrap: balance;
 }
+/* Definimos la animación */
+/* =========================================
+   Marquee de Aseguradoras
+   ========================================= */
+/* =========================================
+   Marquee de Aseguradoras (Perfect Loop)
+   ========================================= */
+@keyframes infinite-scroll {
+  0% { 
+    transform: translateX(0); 
+  }
+  100% { 
+    /* Como armamos 2 cajas idénticas en el HTML, -50% mueve exactamente UNA caja entera. 
+       ¡Chau matemáticas raras! */
+    transform: translateX(-50%); 
+  }
+}
+
+.jh-marquee {
+  display: flex;
+  width: max-content;
+  animation: infinite-scroll 38s linear infinite;
+}
+
+/* Pausa la cinta cuando el usuario quiere mirar un logo */
+/*.jh-marquee:hover {
+  animation-play-state: paused;
+}*/
