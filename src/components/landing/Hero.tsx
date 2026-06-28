@@ -87,11 +87,11 @@ export function Hero() {
         className="absolute inset-0 z-[1] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(to right, var(--brand-navy) 0%, var(--brand-navy) 42%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 60%, color-mix(in oklab, var(--brand-navy) 20%, transparent) 80%, transparent 100%)",
+            "linear-gradient(to right, var(--brand-navy) 0%, var(--brand-navy) 35%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 10%, transparent) 75%, transparent 95%)",
         }}
       />
       {/* Degradado exclusivo para celulares (de abajo hacia arriba) */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy via-navy/40 to-transparent md:hidden pointer-events-none" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-navy via-navy/25 to-transparent md:hidden pointer-events-none" />
 
       {/* 3. CONTENIDO EN CUADRANTE ESTRICTO */}
       <motion.div
@@ -177,12 +177,11 @@ export function Hero() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.4, duration: 1 }}
-        className="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-cream/40 md:flex"
-      >
+        className="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-cream/55 md:flex"      >
         Scroll
-        <span className="relative block h-10 w-px overflow-hidden bg-cream/15">
-          <motion.span
-            className="absolute left-0 top-0 block h-1/2 w-full bg-cream/40"
+        <span className="relative block h-10 w-px overflow-hidden bg-cream/25">
+        <motion.span
+         className="absolute left-0 top-0 block h-1/2 w-full bg-cream/60"
             animate={{ y: ["-100%", "200%"] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           />
